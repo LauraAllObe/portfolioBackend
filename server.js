@@ -2,28 +2,31 @@ require('dotenv').config();
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
-const app = express();
 
+const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// 🔐 Setup Mailgun transporter globally
+const transporter = nodemailer.createTransport({
+  host: 'smtp.mailgun.org',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.MAILGUN_USER,
+    pass: process.env.MAILGUN_PASS
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
+// 📤 Send email endpoint
 app.post('/send-email', async (req, res) => {
   const { name, email, subject, message, time } = req.body;
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.mailgun.org',
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.MAILGUN_USER,
-      pass: process.env.MAILGUN_PASS
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  });
 
   const mailOptions = {
     from: `"${name}" <contact@lauraobermaier.info>`,
@@ -51,21 +54,23 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
+// 🧪 Diagnostic test route
 app.get('/test-email', async (req, res) => {
   try {
     await transporter.sendMail({
-      from: '"Test" <contact@lauraobermaier.info>',
+      from: '"Test Bot" <contact@lauraobermaier.info>',
       to: 'lauraaobermaier@gmail.com',
-      subject: 'Testing Mailgun from server',
-      text: 'It works!',
+      subject: 'Test Email from Backend',
+      text: 'Hello from Heroku. The email service is working.',
     });
-    res.send('Email sent!');
+    res.send('✅ Test email sent successfully!');
   } catch (err) {
     console.error("Manual test failed:", err);
-    res.status(500).send('Error sending test email');
+    res.status(500).send('❌ Failed to send test email.');
   }
 });
 
+// Start server
 app.listen(PORT, () => {
-  console.log(`Email server running on http://localhost:${PORT}`);
+  console.log(`✅ Email server running on port ${PORT}`);
 });
