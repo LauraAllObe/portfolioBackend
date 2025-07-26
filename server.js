@@ -70,6 +70,10 @@ app.get('/test-email', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('✅ Email backend is running.');
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`✅ Email server running on port ${PORT}`);
