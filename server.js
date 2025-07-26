@@ -57,16 +57,30 @@ app.post('/send-email', async (req, res) => {
 // 🧪 Diagnostic test route
 app.get('/test-email', async (req, res) => {
   try {
-    await transporter.sendMail({
-      from: '"Test Bot" <contact@lauraobermaier.info>',
-      to: 'lauraaobermaier@gmail.com',
-      subject: 'Test Email from Backend',
-      text: 'Hello from Heroku. The email service is working.',
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.mailgun.org',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.MAILGUN_USER,
+        pass: process.env.MAILGUN_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
-    res.send('✅ Test email sent successfully!');
+
+    await transporter.sendMail({
+      from: 'contact@lauraobermaier.info',
+      to: 'lauraaobermaier@gmail.com',
+      subject: 'Heroku Mailgun Test',
+      text: '✅ Success! Your Heroku Mailgun setup works.'
+    });
+
+    res.send('✅ Test email sent!');
   } catch (err) {
-    console.error("Manual test failed:", err);
-    res.status(500).send('❌ Failed to send test email.');
+    console.error("❌ Test email failed:", err);
+    res.status(500).send('❌ Error sending test email');
   }
 });
 
