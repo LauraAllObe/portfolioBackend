@@ -51,6 +51,21 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
+app.get('/test-email', async (req, res) => {
+  try {
+    await transporter.sendMail({
+      from: '"Test" <contact@lauraobermaier.info>',
+      to: 'lauraaobermaier@gmail.com',
+      subject: 'Testing Mailgun from server',
+      text: 'It works!',
+    });
+    res.send('Email sent!');
+  } catch (err) {
+    console.error("Manual test failed:", err);
+    res.status(500).send('Error sending test email');
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Email server running on http://localhost:${PORT}`);
 });
