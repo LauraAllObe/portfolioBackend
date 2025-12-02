@@ -29,7 +29,7 @@ app.post('/send-email', async (req, res) => {
   const { name, email, subject, message, time } = req.body;
 
   const mailOptions = {
-    from: `"${name}" <contact@lauraobermaier.info>`,
+    from: `"${name}" <contact@lauralovelace.info>`,
     to: 'lauraaobermaier@gmail.com',
     replyTo: email,
     subject,
@@ -71,7 +71,7 @@ app.get('/test-email', async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: 'contact@lauraobermaier.info',
+      from: 'contact@lauralovelace.info',
       to: 'lauraaobermaier@gmail.com',
       subject: 'Heroku Mailgun Test',
       text: '✅ Success! Your Heroku Mailgun setup works.'
