@@ -30,7 +30,7 @@ app.post('/send-email', async (req, res) => {
 
   const mailOptions = {
     from: `"${name}" <contact@lauralovelace.info>`,
-    to: 'lauraaobermaier@gmail.com',
+    to: 'laura.builds.tech@gmail.com',
     replyTo: email,
     subject,
     html: `
@@ -72,7 +72,7 @@ app.get('/test-email', async (req, res) => {
 
     await transporter.sendMail({
       from: 'contact@lauralovelace.info',
-      to: 'lauraaobermaier@gmail.com',
+      to: 'laura.builds.tech@gmail.com',
       subject: 'Heroku Mailgun Test',
       text: '✅ Success! Your Heroku Mailgun setup works.'
     });
